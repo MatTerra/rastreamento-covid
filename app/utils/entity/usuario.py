@@ -2,10 +2,13 @@ from dataclasses import dataclass, field
 from datetime import datetime, date
 from secrets import token_bytes
 from base64 import b64decode, b64encode
+from typing import List
 
 from cryptography.hazmat.primitives.hashes import SHA3_512, Hash
 
 from nova_api.entity import generate_id
+
+from utils.entity.email import Email
 
 
 def generate_salt() -> str:
@@ -40,12 +43,15 @@ class Usuario:
     id_: str = field(default_factory=generate_id,
                      metadata={"primary_key": True})
     ord: int = field(default=None)
-    salt: str = field(default_factory=generate_salt)
+    salt: str = field(default_factory=generate_salt, compare=False)
     password: str = field(default="")
     primeiro_nome: str = field(default="")
     ultimo_nome: str = field(default="")
     consentimento: bool = field(default=False)
-    data_nascimento: date = field(default_factory=datetime.now)
+    data_nascimento: date = field(default_factory=datetime.now, compare=False)
+    emails: List[Email] = field(default_factory=list,
+                                compare=False,
+                                metadata={"database": False})
 
     def __post_init__(self):
         if not isinstance(self.data_nascimento, datetime):
