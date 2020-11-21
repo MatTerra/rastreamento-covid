@@ -8,6 +8,7 @@ from cryptography.hazmat.primitives.hashes import SHA3_512, Hash
 
 from nova_api.entity import generate_id
 
+from utils.entity.base import Base
 from utils.entity.email import Email
 
 
@@ -39,10 +40,9 @@ def hash_password(password: str, salt: str) -> str:
 
 
 @dataclass
-class Usuario:
+class Usuario(Base):
     id_: str = field(default_factory=generate_id,
                      metadata={"primary_key": True})
-    ord: int = field(default=None)
     salt: str = field(default_factory=generate_salt, compare=False)
     password: str = field(default="")
     primeiro_nome: str = field(default="")
@@ -52,9 +52,10 @@ class Usuario:
     emails: List[Email] = field(default_factory=list,
                                 compare=False,
                                 metadata={"database": False})
+    ord: int = field(default=None, metadata={"database": False})
 
     def __post_init__(self):
-        if not isinstance(self.data_nascimento, datetime):
+        if not isinstance(self.data_nascimento, date):
             self.data_nascimento = datetime.strptime(self.data_nascimento,
                                                      "%Y-%m-%d")
         if not self.password.endswith('=='):

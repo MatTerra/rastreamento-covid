@@ -7,5 +7,6 @@ from utils.entity.email import Email
 class EmailDAO(GenericSQLDAO):
     def __init__(self, database_instance=None):
         super().__init__(database_instance=database_instance,
+                         table='email',
                          database_type=PostgreSQLHelper,
                          return_class=Email)

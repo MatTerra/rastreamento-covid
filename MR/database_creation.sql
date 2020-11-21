@@ -19,11 +19,11 @@ DROP SCHEMA IF EXISTS rastreamento_covid ;
 -- USE rastreamento_covid ;
 
 -- -----------------------------------------------------
--- Table rastreamento_covid.usuario
+-- Table usuario
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS rastreamento_covid.usuario ;
+DROP TABLE IF EXISTS usuario ;
 
-CREATE TABLE IF NOT EXISTS rastreamento_covid.usuario (
+CREATE TABLE IF NOT EXISTS usuario (
   usuario_id_ CHAR(32) NOT NULL,
   usuario_ord SERIAL UNIQUE NOT NULL,
   usuario_salt CHAR(32) NOT NULL,
@@ -31,16 +31,16 @@ CREATE TABLE IF NOT EXISTS rastreamento_covid.usuario (
   usuario_primeiro_nome VARCHAR(45) NOT NULL,
   usuario_ultimo_nome VARCHAR(45) NOT NULL,
   usuario_consentimento BOOLEAN NOT NULL DEFAULT FALSE,
-  usuario_data_nimento DATE NULL,
+  usuario_data_nascimento DATE NULL,
   PRIMARY KEY (usuario_id_));
 
 
 -- -----------------------------------------------------
--- Table rastreamento_covid.email
+-- Table email
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS rastreamento_covid.email ;
+DROP TABLE IF EXISTS email ;
 
-CREATE TABLE IF NOT EXISTS rastreamento_covid.email (
+CREATE TABLE IF NOT EXISTS email (
   email_id_ SERIAL NOT NULL,
   email_email VARCHAR(321) NOT NULL,
   email_usuario_id_ CHAR(32) NOT NULL,
@@ -48,36 +48,36 @@ CREATE TABLE IF NOT EXISTS rastreamento_covid.email (
   PRIMARY KEY (email_id_),
   CONSTRAINT fk_email_usuario
     FOREIGN KEY (email_usuario_id_)
-    REFERENCES rastreamento_covid.usuario (usuario_id_)
+    REFERENCES usuario (usuario_id_)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ;
 
 
 -- -----------------------------------------------------
--- Table rastreamento_covid.telefone
+-- Table telefone
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS rastreamento_covid.telefone ;
+DROP TABLE IF EXISTS telefone ;
 
-CREATE TABLE IF NOT EXISTS rastreamento_covid.telefone (
+CREATE TABLE IF NOT EXISTS telefone (
   telefone_id_ SERIAL NOT NULL,
   telefone_telefone CHAR(9) NOT NULL,
   telefone_usuario_id_ CHAR(32) NOT NULL,
   PRIMARY KEY (telefone_id_),
   CONSTRAINT fk_telefone_usuario
     FOREIGN KEY (telefone_usuario_id_)
-    REFERENCES rastreamento_covid.usuario (usuario_id_)
+    REFERENCES usuario (usuario_id_)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ;
 
 
 -- -----------------------------------------------------
--- Table rastreamento_covid.local
+-- Table local
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS rastreamento_covid.local ;
+DROP TABLE IF EXISTS local ;
 
-CREATE TABLE IF NOT EXISTS rastreamento_covid.local (
+CREATE TABLE IF NOT EXISTS local (
   local_id_ CHAR(32) NOT NULL,
   local_ord SERIAL UNIQUE NOT NULL,
   local_nome VARCHAR(45) NOT NULL,
@@ -87,11 +87,11 @@ CREATE TABLE IF NOT EXISTS rastreamento_covid.local (
 
 
 -- -----------------------------------------------------
--- Table rastreamento_covid.checkin
+-- Table checkin
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS rastreamento_covid.checkin ;
+DROP TABLE IF EXISTS checkin ;
 
-CREATE TABLE IF NOT EXISTS rastreamento_covid.checkin (
+CREATE TABLE IF NOT EXISTS checkin (
   checkin_id_ SERIAL NOT NULL,
   checkin_id_usuario CHAR(32) NOT NULL,
   checkin_local_id_ CHAR(32) NOT NULL,
@@ -101,23 +101,23 @@ CREATE TABLE IF NOT EXISTS rastreamento_covid.checkin (
   PRIMARY KEY (checkin_id_),
   CONSTRAINT fk_checkin_local
     FOREIGN KEY (checkin_local_id_)
-    REFERENCES rastreamento_covid.local (local_id_)
+    REFERENCES local (local_id_)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT fk_checkin_usuario
     FOREIGN KEY (checkin_id_usuario)
-    REFERENCES rastreamento_covid.usuario (usuario_id_)
+    REFERENCES usuario (usuario_id_)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ;
 
 
 -- -----------------------------------------------------
--- Table rastreamento_covid.notificacao
+-- Table notificacao
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS rastreamento_covid.notificacao ;
+DROP TABLE IF EXISTS notificacao ;
 
-CREATE TABLE IF NOT EXISTS rastreamento_covid.notificacao (
+CREATE TABLE IF NOT EXISTS notificacao (
   notificacao_id_ SERIAL NOT NULL,
   notificacao_checkin_id_ INT NOT NULL,
   notificacao_hash_usuario CHAR(256) NOT NULL,
@@ -125,18 +125,18 @@ CREATE TABLE IF NOT EXISTS rastreamento_covid.notificacao (
   PRIMARY KEY (notificacao_id_),
   CONSTRAINT fk_notificacao_checkin
     FOREIGN KEY (notificacao_checkin_id_)
-    REFERENCES rastreamento_covid.checkin (checkin_id_)
+    REFERENCES checkin (checkin_id_)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ;
 
 
 -- -----------------------------------------------------
--- Table rastreamento_covid.sintoma
+-- Table sintoma
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS rastreamento_covid.sintoma ;
+DROP TABLE IF EXISTS sintoma ;
 
-CREATE TABLE IF NOT EXISTS rastreamento_covid.sintoma (
+CREATE TABLE IF NOT EXISTS sintoma (
   sintoma_id_ SERIAL NOT NULL,
   sintoma_descricao VARCHAR(45) NOT NULL,
   sintoma_risco INT NOT NULL,
@@ -145,11 +145,11 @@ CREATE TABLE IF NOT EXISTS rastreamento_covid.sintoma (
 
 
 -- -----------------------------------------------------
--- Table rastreamento_covid.caso_sintoma
+-- Table caso_sintoma
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS rastreamento_covid.caso_sintoma ;
+DROP TABLE IF EXISTS caso_sintoma ;
 
-CREATE TABLE IF NOT EXISTS rastreamento_covid.caso_sintoma (
+CREATE TABLE IF NOT EXISTS caso_sintoma (
   caso_sintoma_id_ CHAR(32) NOT NULL,
   caso_sintoma_usuario_id_ CHAR(32) NOT NULL,
   caso_sintoma_sintoma_id_ INT NOT NULL,
@@ -158,23 +158,23 @@ CREATE TABLE IF NOT EXISTS rastreamento_covid.caso_sintoma (
   PRIMARY KEY (caso_sintoma_id_),
   CONSTRAINT fk_caso_sintoma_sintoma
     FOREIGN KEY (caso_sintoma_sintoma_id_)
-    REFERENCES rastreamento_covid.sintoma (sintoma_id_)
+    REFERENCES sintoma (sintoma_id_)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT fk_caso_sintoma_usuario
     FOREIGN KEY (caso_sintoma_usuario_id_)
-    REFERENCES rastreamento_covid.usuario (usuario_id_)
+    REFERENCES usuario (usuario_id_)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ;
 
 
 -- -----------------------------------------------------
--- Table rastreamento_covid.medicamento
+-- Table medicamento
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS rastreamento_covid.medicamento ;
+DROP TABLE IF EXISTS medicamento ;
 
-CREATE TABLE IF NOT EXISTS rastreamento_covid.medicamento (
+CREATE TABLE IF NOT EXISTS medicamento (
   medicamento_id_ INT NOT NULL,
   medicamento_nome VARCHAR(45) NOT NULL,
   PRIMARY KEY (medicamento_id_))
@@ -182,11 +182,11 @@ CREATE TABLE IF NOT EXISTS rastreamento_covid.medicamento (
 
 
 -- -----------------------------------------------------
--- Table rastreamento_covid.medico
+-- Table medico
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS rastreamento_covid.medico ;
+DROP TABLE IF EXISTS medico ;
 
-CREATE TABLE IF NOT EXISTS rastreamento_covid.medico (
+CREATE TABLE IF NOT EXISTS medico (
   medico_id_ CHAR(32) NOT NULL,
   medico_nome VARCHAR(45) NOT NULL,
   PRIMARY KEY (medico_id_))
@@ -194,11 +194,11 @@ CREATE TABLE IF NOT EXISTS rastreamento_covid.medico (
 
 
 -- -----------------------------------------------------
--- Table rastreamento_covid.tratamento
+-- Table tratamento
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS rastreamento_covid.tratamento ;
+DROP TABLE IF EXISTS tratamento ;
 
-CREATE TABLE IF NOT EXISTS rastreamento_covid.tratamento (
+CREATE TABLE IF NOT EXISTS tratamento (
   tratamento_medicamento_id_ INT NOT NULL,
   tratamento_medico_id_ CHAR(32) NOT NULL,
   tratamento_usuario_id_ CHAR(32) NOT NULL,
@@ -206,28 +206,28 @@ CREATE TABLE IF NOT EXISTS rastreamento_covid.tratamento (
   PRIMARY KEY (tratamento_medicamento_id_, tratamento_medico_id_, tratamento_usuario_id_),
   CONSTRAINT fk_medicamento_has_medico_medicamento1
     FOREIGN KEY (tratamento_medicamento_id_)
-    REFERENCES rastreamento_covid.medicamento (medicamento_id_)
+    REFERENCES medicamento (medicamento_id_)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT fk_medicamento_has_medico_medico1
     FOREIGN KEY (tratamento_medico_id_)
-    REFERENCES rastreamento_covid.medico (medico_id_)
+    REFERENCES medico (medico_id_)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT fk_tratamento_usuario
     FOREIGN KEY (tratamento_usuario_id_)
-    REFERENCES rastreamento_covid.usuario (usuario_id_)
+    REFERENCES usuario (usuario_id_)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ;
 
 
 -- -----------------------------------------------------
--- Table rastreamento_covid.hospital
+-- Table hospital
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS rastreamento_covid.hospital ;
+DROP TABLE IF EXISTS hospital ;
 
-CREATE TABLE IF NOT EXISTS rastreamento_covid.hospital (
+CREATE TABLE IF NOT EXISTS hospital (
   hospital_id_ CHAR(32) NOT NULL,
   hospital_local VARCHAR(256) NOT NULL,
   hospital_nome VARCHAR(45) NOT NULL,
@@ -236,33 +236,33 @@ CREATE TABLE IF NOT EXISTS rastreamento_covid.hospital (
 
 
 -- -----------------------------------------------------
--- Table rastreamento_covid.contratacao
+-- Table contratacao
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS rastreamento_covid.contratacao ;
+DROP TABLE IF EXISTS contratacao ;
 
-CREATE TABLE IF NOT EXISTS rastreamento_covid.contratacao (
+CREATE TABLE IF NOT EXISTS contratacao (
   contratacao_medico_id_ CHAR(32) NOT NULL,
   contratacao_hospital_id_ CHAR(32) NOT NULL,
   PRIMARY KEY (contratacao_medico_id_, contratacao_hospital_id_),
   CONSTRAINT fk_medico_has_Hospital_medico1
     FOREIGN KEY (contratacao_medico_id_)
-    REFERENCES rastreamento_covid.medico (medico_id_)
+    REFERENCES medico (medico_id_)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT fk_medico_has_Hospital_Hospital1
     FOREIGN KEY (contratacao_hospital_id_)
-    REFERENCES rastreamento_covid.hospital (hospital_id_)
+    REFERENCES hospital (hospital_id_)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ;
 
 
 -- -----------------------------------------------------
--- Table rastreamento_covid.emissor
+-- Table emissor
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS rastreamento_covid.emissor ;
+DROP TABLE IF EXISTS emissor ;
 
-CREATE TABLE IF NOT EXISTS rastreamento_covid.emissor (
+CREATE TABLE IF NOT EXISTS emissor (
   emissor_id_ INT NOT NULL,
   nome VARCHAR(45) NOT NULL,
   local VARCHAR(256) NOT NULL,
@@ -271,11 +271,11 @@ CREATE TABLE IF NOT EXISTS rastreamento_covid.emissor (
 
 
 -- -----------------------------------------------------
--- Table rastreamento_covid.diagnostico
+-- Table diagnostico
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS rastreamento_covid.diagnostico ;
+DROP TABLE IF EXISTS diagnostico ;
 
-CREATE TABLE IF NOT EXISTS rastreamento_covid.diagnostico (
+CREATE TABLE IF NOT EXISTS diagnostico (
   diagnostico_usuario_id_ CHAR(32) NOT NULL,
   diagnostico_emissor_id_ INT NOT NULL,
   diagnostico_data_exame DATE NOT NULL,
@@ -285,23 +285,23 @@ CREATE TABLE IF NOT EXISTS rastreamento_covid.diagnostico (
   PRIMARY KEY (diagnostico_usuario_id_, diagnostico_emissor_id_),
   CONSTRAINT fk_diagnostico_emissor1
     FOREIGN KEY (diagnostico_emissor_id_)
-    REFERENCES rastreamento_covid.emissor (emissor_id_)
+    REFERENCES emissor (emissor_id_)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT fk_diagnostico_usuario
     FOREIGN KEY (diagnostico_usuario_id_)
-    REFERENCES rastreamento_covid.usuario (usuario_id_)
+    REFERENCES usuario (usuario_id_)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ;
 
 
 -- -----------------------------------------------------
--- Table rastreamento_covid.internacao
+-- Table internacao
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS rastreamento_covid.internacao ;
+DROP TABLE IF EXISTS internacao ;
 
-CREATE TABLE IF NOT EXISTS rastreamento_covid.internacao (
+CREATE TABLE IF NOT EXISTS internacao (
   internacao_hospital_id_ CHAR(32) NOT NULL,
   internacao_usuario_id_ CHAR(32) NOT NULL,
   internacao_data_inicio DATE NOT NULL,
@@ -310,12 +310,12 @@ CREATE TABLE IF NOT EXISTS rastreamento_covid.internacao (
   PRIMARY KEY (internacao_hospital_id_, internacao_data_inicio, internacao_usuario_id_),
   CONSTRAINT fk_internacao_hospital
     FOREIGN KEY (internacao_hospital_id_)
-    REFERENCES rastreamento_covid.hospital (hospital_id_)
+    REFERENCES hospital (hospital_id_)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT fk_internacao_usuario
     FOREIGN KEY (internacao_usuario_id_)
-    REFERENCES rastreamento_covid.usuario (usuario_id_)
+    REFERENCES usuario (usuario_id_)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ;
