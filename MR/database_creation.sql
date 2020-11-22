@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS usuario (
   usuario_id_ CHAR(32) NOT NULL,
   usuario_ord SERIAL UNIQUE NOT NULL,
   usuario_salt CHAR(32) NOT NULL,
-  usuario_password CHAR(512) NOT NULL,
+  usuario_password CHAR(88) NOT NULL,
   usuario_primeiro_nome VARCHAR(45) NOT NULL,
   usuario_ultimo_nome VARCHAR(45) NOT NULL,
   usuario_consentimento BOOLEAN NOT NULL DEFAULT FALSE,

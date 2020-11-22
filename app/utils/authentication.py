@@ -14,10 +14,6 @@ def login(email: str, password: str) -> Usuario:
         usuario_dao = UsuarioDAO()
         usuario = usuario_dao.select_from_email(email=email)
         password_hash = hash_password(password, usuario.salt)
-        print(usuario)
-        print(usuario.password)
-        print(password_hash)
-        input()
         if password_hash == usuario.password:
             return usuario
         return None

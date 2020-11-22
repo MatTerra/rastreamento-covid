@@ -58,6 +58,7 @@ class Usuario(Base):
         if not isinstance(self.data_nascimento, date):
             self.data_nascimento = datetime.strptime(self.data_nascimento,
                                                      "%Y-%m-%d")
+        self.password = self.password.strip()
         if not self.password.endswith('=='):
             self.password = hash_password(password=self.password,
                                           salt=self.salt)
