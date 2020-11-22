@@ -41,8 +41,8 @@ CREATE TABLE IF NOT EXISTS usuario (
 DROP TABLE IF EXISTS email ;
 
 CREATE TABLE IF NOT EXISTS email (
-  email_id_ SERIAL NOT NULL,
-  email_email VARCHAR(321) NOT NULL,
+  email_id_ CHAR(32) NOT NULL,
+  email_email VARCHAR(321) UNIQUE NOT NULL,
   email_usuario_id_ CHAR(32) NOT NULL,
   email_primario BOOLEAN NOT NULL DEFAULT FALSE,
   PRIMARY KEY (email_id_),
@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS email (
 DROP TABLE IF EXISTS telefone ;
 
 CREATE TABLE IF NOT EXISTS telefone (
-  telefone_id_ SERIAL NOT NULL,
+  telefone_id_ CHAR(32) NOT NULL,
   telefone_telefone CHAR(9) NOT NULL,
   telefone_usuario_id_ CHAR(32) NOT NULL,
   PRIMARY KEY (telefone_id_),
@@ -137,7 +137,7 @@ CREATE TABLE IF NOT EXISTS notificacao (
 DROP TABLE IF EXISTS sintoma ;
 
 CREATE TABLE IF NOT EXISTS sintoma (
-  sintoma_id_ SERIAL NOT NULL,
+  sintoma_id_ CHAR(32) NOT NULL,
   sintoma_descricao VARCHAR(45) NOT NULL,
   sintoma_risco INT NOT NULL,
   PRIMARY KEY (sintoma_id_))

@@ -9,8 +9,6 @@ from utils.entity.usuario import Usuario
 from utils import authentication
 
 
-
-
 def sair():
     os.system("clear")
     print(bcolors.OKGREEN+"Obrigado por utilizar o sistema de rastreamento "
@@ -76,7 +74,7 @@ def get_passwd():
 
 
 def signup() -> Usuario:
-    print("Vamos criar sua conta! Pressione CTRL + C para cancelar")
+    print("Vamos criar sua conta! Pressione CTRL + C para cancelar.")
     try:
         print("Por favor preencha os dados abaixo:")
         name = read_simple_string("Primeiro nome")
@@ -88,22 +86,8 @@ def signup() -> Usuario:
                                "uma conta!"+bcolors.ENDC)
             return None
         password = get_passwd()
-        usuario = Usuario(primeiro_nome=name, ultimo_nome=last_name,
-                          password=password, consentimento=consent,
-                          emails=[])
-        email = Email(email=read_simple_string("Email"),
-                      usuario_id_=usuario.id_,
-                      primario=True)
-        usuario.emails = [email]
-        # Validate email already registered
-        usuario_dao = UsuarioDAO()
-        try:
-            usuario_dao.create(usuario)
-        except Exception as e:
-            print(bcolors.FAIL + "Não foi possível criar o usuário...\n"
-                  + str(e) + bcolors.ENDC)
-            return None
-        return usuario
+        email = read_simple_string("Email")
+        return authentication.signup(name, last_name, password, consent, [email])
     except KeyboardInterrupt:
         os.system("clear")
         print(
