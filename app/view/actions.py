@@ -16,6 +16,11 @@ def sair():
     sys.exit(0)
 
 
+def logout() -> Usuario:
+    print(bcolors.OKGREEN + "Você foi deslogado!" + bcolors.ENDC)
+    return None
+
+
 def login() -> Usuario:
     """ Authenticate a user
 
@@ -95,4 +100,4 @@ def signup() -> Usuario:
         return None
 
 
-actions = {"0": {"name": "Sair", "function": sair}}
+actions = {"0": {"name": "Sair", "function": logout}}

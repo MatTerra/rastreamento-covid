@@ -17,10 +17,11 @@ def main_menu() -> str:
 def authentication_menu() -> str:
     print("Bem-vindo ao sistema de rastreamento de Covid.")
     print("O que você gostaria de fazer?")
-    print("\t0 - Login")
-    print("\t1 - Cadastro")
+    print("\t0 - Sair")
+    print("\t1 - Login")
+    print("\t2 - Cadastro")
     escolha = input(">> ").strip()
     os.system("clear")
-    if escolha not in ["0", "1"]:
+    if escolha not in ["0", "1", "2"]:
         raise ValueError(escolha)
     return escolha
