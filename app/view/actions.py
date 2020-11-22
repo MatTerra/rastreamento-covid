@@ -19,10 +19,10 @@ def sair():
 def login() -> Usuario:
     """ Authenticate a user
 
-        :param email: email of the user to authenticate
-        :param password: hash of the password from the user to authenticate
-        :return: The user id
-        """
+    :param email: email of the user to authenticate
+    :param password: hash of the password from the user to authenticate
+    :return: The user id
+    """
     print("Por favor se autentique:")
     email = input("Email: ")
     password = getpass("Password: ")
