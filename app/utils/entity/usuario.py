@@ -10,7 +10,7 @@ from nova_api.entity import generate_id
 
 from utils.entity.base import Base
 from utils.entity.email import Email
-
+from utils.entity.telefone import Telefone
 
 def generate_salt() -> str:
     """ Generate a 24 bytes salt for password hashing
@@ -52,6 +52,9 @@ class Usuario(Base):
     emails: List[Email] = field(default_factory=list,
                                 compare=False,
                                 metadata={"database": False})
+    telefones: List[Telefone] = field(default_factory=list,
+                                      compare=False,
+                                      metadata={"database": False})
     ord: int = field(default=None, metadata={"database": False})
 
     def __post_init__(self):
