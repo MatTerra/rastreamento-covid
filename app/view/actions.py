@@ -1,5 +1,6 @@
 import os
 import sys
+from datetime import date, datetime
 from getpass import getpass
 
 from utils.colors import bcolors
@@ -39,7 +40,7 @@ def get_passwd():
         if len(passwd) >= 6:
             break
         print(bcolors.FAIL + "Sua senha deve ter ao menos 6 caracteres."
-                  + bcolors.ENDC)
+              + bcolors.ENDC)
     confirm_passwd = ""
     while confirm_passwd != passwd:
         confirm_passwd = getpass(" Confirme sua senha:")
@@ -55,9 +56,10 @@ def get_passwd():
 # -------------- LEAVE ------------------------------------------------------ #
 def sair():
     os.system("clear")
-    print(bcolors.OKGREEN+"Obrigado por utilizar o sistema de rastreamento "
-                          "do COVID"+bcolors.ENDC)
+    print(bcolors.OKGREEN + "Obrigado por utilizar o sistema de rastreamento "
+                            "do COVID" + bcolors.ENDC)
     sys.exit(0)
+
 
 # -------------- END LEAVE -------------------------------------------------- #
 
@@ -97,8 +99,9 @@ def signup() -> Usuario:
         consent = get_consent()
         if not consent:
             os.system("clear")
-            print(bcolors.FAIL+"Você deve concordar com os termos para criar "
-                               "uma conta!"+bcolors.ENDC)
+            print(
+                bcolors.FAIL + "Você deve concordar com os termos para criar "
+                               "uma conta!" + bcolors.ENDC)
             return None
         password = get_passwd()
         email = read_simple_string("Email")
@@ -110,12 +113,13 @@ def signup() -> Usuario:
             bcolors.WARNING + "Cancelando criação de conta!" + bcolors.ENDC)
         return None
 
+
 # -------------- END Authentication ----------------------------------------- #
 
 
 # -------------- BEGIN Profile ---------------------------------------------- #
 def add_email(user: Usuario):
-    new_email_addr = read_simple_string("Insira o novo email: ")
+    new_email_addr = read_simple_string("Insira o novo email")
     new_email = Email(email=new_email_addr,
                       usuario_id_=user.id_, primario=False)
 
@@ -124,7 +128,8 @@ def add_email(user: Usuario):
         dao = EmailDAO()
         dao.create(new_email)
         os.system("clear")
-        print(f"{bcolors.OKGREEN}Novo email inserido com sucesso!{bcolors.ENDC}")
+        print(
+            f"{bcolors.OKGREEN}Novo email inserido com sucesso!{bcolors.ENDC}")
     except:
         os.system("clear")
         print(f"{bcolors.FAIL}Ocorreu um erro ao inserir o novo email... "
@@ -172,7 +177,35 @@ def remove_email(user: Usuario):
 
 
 def change_birthday(user: Usuario):
-    pass
+    os.system("clear")
+
+    birthday = ""
+    while not isinstance(birthday, date):
+        date_input = read_simple_string(
+            "Insira sua data de nascimento (dd/mm/AAAA)")
+        try:
+            birthday = datetime.strptime(date_input, "%d/%m/%Y")
+            if birthday.timestamp() > datetime.now().timestamp():
+                birthday = ""
+                raise ValueError
+        except ValueError:
+            print(f"{bcolors.FAIL}Data inválida!{bcolors.ENDC}")
+
+    dao = None
+    try:
+        user.data_nascimento = birthday
+        dao = UsuarioDAO()
+        dao.update(user)
+        os.system("clear")
+        print(f"{bcolors.OKGREEN}Data de nascimento atualizada"
+              f" com sucesso!{bcolors.ENDC}")
+    except:
+        os.system("clear")
+        print(f"{bcolors.FAIL}Não foi possível atualizar a data de"
+              f" nascimento... Tente novamente mais tarde.{bcolors.ENDC}")
+    finally:
+        if dao:
+            dao.close()
 
 
 def edit_profile(user: Usuario) -> Usuario:
@@ -180,7 +213,6 @@ def edit_profile(user: Usuario) -> Usuario:
     print("\t0 - Adicionar email secundário")
     print("\t1 - Remover email")
     print("\t2 - Data de nascimento")
-    print("\t3 - Nome\n")
     choice = ""
     while choice.lower() not in ["0", "1", "2"]:
         choice = input(">> ")
@@ -198,7 +230,8 @@ def edit_profile(user: Usuario) -> Usuario:
 def view_profile(user: Usuario) -> Usuario:
     print("Perfil do Usuário\n")
     print(f"\tNome:\t\t\t{user.primeiro_nome} {user.ultimo_nome}")
-    print(f"\tData de nascimento:\t{user.data_nascimento}")
+    print(
+        f"\tData de nascimento:\t{user.data_nascimento.strftime('%d/%m/%Y')}")
     print(f"\tEmails:")
     for email in user.emails:
         print(f"\t\t{'*' if email.primario else '-'} {email.email}")
@@ -212,7 +245,8 @@ def view_profile(user: Usuario) -> Usuario:
         os.system("clear")
         return edit_profile(user)
     os.system("clear")
-    return edit_profile(user)
+    return user
+
 
 # -------------- END Profile ------------------------------------------------ #
 
