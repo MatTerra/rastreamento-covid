@@ -1,3 +1,5 @@
+from typing import List
+
 from nova_api.dao.generic_sql_dao import GenericSQLDAO
 from nova_api.persistence.postgresql_helper import PostgreSQLHelper
 
@@ -13,6 +15,23 @@ class UsuarioDAO(GenericSQLDAO):
                          database_type=PostgreSQLHelper,
                          return_class=Usuario)
 
+    def get_all(self, length: int = 20, offset: int = 0,
+                filters: dict = None) -> (int, List[Usuario]):
+        total, results = super().get_all(length, offset, filters)
+
+        email_dao = EmailDAO(database_instance=self.database)
+
+        for result in results:
+            n_emails = 21
+            while n_emails >= 20:
+                _, emails = email_dao.get_all(
+                    filters={"usuario_id_": result.id_})
+                print(emails)
+                n_emails = len(emails)
+                result.emails.extend(emails)
+
+        return total, results
+
     def create(self, entity: Usuario) -> str:
         super(UsuarioDAO, self).create(entity)
         email_dao = EmailDAO(database_instance=self.database)
@@ -24,7 +43,7 @@ class UsuarioDAO(GenericSQLDAO):
             raise IOError("Not able to insert user")
 
     def select_from_email(self, email: str) -> Usuario:
-        query = "select {fields} from {table} LEFT JOIN email " \
+        query = "SELECT {fields} FROM {table} LEFT JOIN email " \
                 "ON email_usuario_id_=usuario_id_ WHERE email_email={filter};"
         query_to_run = query.format(
             fields=', '.join(self.fields.values()),
@@ -41,5 +60,16 @@ class UsuarioDAO(GenericSQLDAO):
             return None
 
         return_list = [self.return_class(*result) for result in results]
+
+        email_dao = EmailDAO(database_instance=self.database)
+
+        for result in return_list:
+            n_emails = 21
+            while n_emails >= 20:
+                _, emails = email_dao.get_all(
+                    filters={"usuario_id_": result.id_})
+                print(emails)
+                n_emails = len(emails)
+                result.emails.extend(emails)
 
         return return_list[0]

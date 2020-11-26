@@ -1,6 +1,7 @@
 import os
 from time import sleep
 
+from utils.entity.usuario import Usuario
 from view.actions import actions
 
 

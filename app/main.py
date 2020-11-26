@@ -36,7 +36,7 @@ if __name__ == "__main__":
                     os.system("clear")
                     if action not in actions.keys():
                         raise ValueError(action)
-                    user = actions[action].get("function", logout)()
+                    user = actions[action].get("function", logout)(user)
                 except ValueError as e:
                     os.system("clear")
                     print(bcolors.WARNING
@@ -44,6 +44,6 @@ if __name__ == "__main__":
                             f" Opção {e} inválida!" + bcolors.ENDC)
                 except KeyboardInterrupt as e:
                     os.system("clear")
-                    user = logout()
+                    user = logout(user)
     except KeyboardInterrupt:
         sair()
