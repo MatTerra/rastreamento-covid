@@ -4,6 +4,7 @@ from nova_api.entity import generate_id
 
 from utils.entity.base import Base
 
+
 @dataclass
 class Local(Base):
     id_: str = field(default_factory=generate_id,

@@ -171,13 +171,7 @@ def remove_email(user: Usuario):
             dao.close()
 
 
-
-
 def change_birthday(user: Usuario):
-    pass
-
-
-def change_name(user: Usuario):
     pass
 
 
@@ -188,7 +182,7 @@ def edit_profile(user: Usuario) -> Usuario:
     print("\t2 - Data de nascimento")
     print("\t3 - Nome\n")
     choice = ""
-    while choice.lower() not in ["0", "1", "2", "3"]:
+    while choice.lower() not in ["0", "1", "2"]:
         choice = input(">> ")
     if choice == '0':
         os.system("clear")
@@ -198,8 +192,6 @@ def edit_profile(user: Usuario) -> Usuario:
         remove_email(user)
     elif choice == '2':
         change_birthday(user)
-    elif choice == '3':
-        change_name(user)
     return user
 
 
