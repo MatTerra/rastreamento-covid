@@ -1,8 +1,6 @@
 import os
-from time import sleep
 
-from utils.entity.usuario import Usuario
-from view.actions import actions
+from utils.controller import actions
 
 
 def main_menu() -> str:
@@ -16,13 +14,13 @@ def main_menu() -> str:
 
 
 def authentication_menu() -> str:
-    print("Bem-vindo ao sistema de rastreamento de Covid.")
-    print("O que você gostaria de fazer?")
-    print("\t0 - Sair")
-    print("\t1 - Login")
-    print("\t2 - Cadastro")
-    escolha = input(">> ").strip()
+    print("Bem-vindo ao sistema de rastreamento de Covid.\n\n")
+    print("O que você gostaria de fazer?\n")
+    print("\tl - Login")
+    print("\tc - Cadastro")
+    print("\tx - Sair")
+    escolha = input(" >> ").strip()
     os.system("clear")
-    if escolha not in ["0", "1", "2"]:
+    if escolha not in ["x", "l", "c"]:
         raise ValueError(escolha)
     return escolha

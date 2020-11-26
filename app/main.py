@@ -1,9 +1,8 @@
 import os
-from time import sleep
 
-from utils.entity.usuario import Usuario
 from view.menus import main_menu, authentication_menu
-from view.actions import sair, actions, login, signup, logout
+from utils.controller import sair, actions
+from utils.controller.authentication import login, logout, signup
 from utils.colors import bcolors
 
 
@@ -16,16 +15,16 @@ if __name__ == "__main__":
                 try:
                     option = authentication_menu()
                     os.system("clear")
-                    if option == "0":
+                    if option == "x":
                         sair()
-                    elif option == "1":
+                    elif option == "l":
                         user = login()
-                    elif option == "2":
+                    elif option == "c":
                         user = signup()
                 except ValueError as e:
                     os.system("clear")
                     print(bcolors.WARNING
-                          + f"A opção deve ser 0, 1 ou 2!"
+                          + f"A opção deve ser c, l ou x!"
                             f" Opção {e} inválida!" + bcolors.ENDC)
             os.system("clear")
             print(bcolors.OKGREEN+"Autenticado!"+bcolors.ENDC)
