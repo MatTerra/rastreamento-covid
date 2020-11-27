@@ -47,9 +47,11 @@ def login() -> Usuario:
     :param password: hash of the password from the user to authenticate
     :return: The user id
     """
-    print("Por favor se autentique:")
-    email = input("Email: ")
-    password = getpass("Password: ")
+    print(f"{bcolors.WARNING}"
+          f"Por favor se autentique:"
+          f"{bcolors.ENDC}\n")
+    email = read_simple_string("Email")
+    password = getpass(f"{bcolors.BOLD} Password: {bcolors.ENDC}")
     user = authentication.login(email=email, password=password)
     if not user:
         system("clear")
@@ -60,9 +62,13 @@ def login() -> Usuario:
 
 
 def signup() -> Usuario:
-    print("Vamos criar sua conta! Pressione CTRL + C para cancelar.")
+    print(f"{bcolors.OKCYAN}{bcolors.BOLD}"
+          f"Vamos criar sua conta! Pressione CTRL + C para cancelar."
+          f"{bcolors.ENDC}\n")
     try:
-        print("Por favor preencha os dados abaixo:")
+        print(f"{bcolors.HEADER}{bcolors.BOLD}"
+              f"Por favor preencha os dados abaixo:"
+              f"{bcolors.ENDC}\n")
         name = read_simple_string("Primeiro nome")
         last_name = read_simple_string("Último nome")
         consent = get_consent()
@@ -79,5 +85,5 @@ def signup() -> Usuario:
     except KeyboardInterrupt:
         system("clear")
         print(
-            bcolors.WARNING + "Cancelando criação de conta!" + bcolors.ENDC)
+            bcolors.WARNING + "Cancelada criação de conta!" + bcolors.ENDC)
         return None

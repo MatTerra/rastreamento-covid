@@ -16,10 +16,8 @@ def sair():
     exit(0)
 
 
-actions = {"p": {"name": "Visualizar perfil",
-                 "function": view.submenus.profile.view_profile},
-           "e": {"name": "Editar perfil",
-                 "function": view.submenus.profile.edit_profile},
+actions = {"p": {"name": "Perfil",
+                 "function": view.submenus.profile.profile_menu},
            "l": {"name": "Locais",
                  "function": view.submenus.location.local_submenu},
            "x": {"name": "Sair",

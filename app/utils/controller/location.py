@@ -7,12 +7,17 @@ from utils.database.localDAO import LocalDAO
 from utils.entity.local import Local
 from utils.input import read_simple_string
 
-itens_per_page = 2
+itens_per_page = 5
 
 
 def create_local():
     system("clear")
-    print("Vamos cadastrar um novo local!")
+    print(f"{bcolors.OKCYAN}{bcolors.BOLD}"
+          f"Vamos cadastrar um novo local!"
+          f"{bcolors.ENDC}\n")
+    print(f"{bcolors.HEADER}{bcolors.BOLD}"
+          f"Por favor preencha os dados abaixo:"
+          f"{bcolors.ENDC}\n")
     name = read_simple_string("Nome do local")
     latitude = read_simple_string("Latitude")
     longitude = read_simple_string("Longitude")
@@ -45,14 +50,19 @@ def view_locais(page: int = 0):
             system("clear")
             print(f"{bcolors.WARNING}A página {page} não está disponível,"
                   f" mostrando a última página disponível.{bcolors.ENDC}")
-            return 0
-        print("Locais:\n")
+            return pages
+        print(f"{bcolors.OKBLUE}{bcolors.BOLD}"
+              f"Locais:"
+              f"{bcolors.ENDC}\n")
         print(f"{bcolors.OKCYAN}"
               f"|{'Nome':^30}|{'Latitude':^20}|{'Longitude':^20}|"
               f"{bcolors.ENDC}")
         for local in locais:
             print(f"|{local.nome:^30}|{local.latitude:^20}"
                   f"|{local.longitude:^20}|")
+        for i in range(itens_per_page - len(locais)):
+            print(f"|{'-':^30}|{'-':^20}"
+                  f"|{'-':^20}|")
         print("\n\t  ", end="")
         for i in range(pages+1):
             print(i, end=' ')
@@ -60,20 +70,23 @@ def view_locais(page: int = 0):
         print("Pressione -> para próxima página")
         print("Pressione <- para a página anterior")
         print("Pressione x para sair da listagem")
-        a=''
-        while a != 'x':
-            a = getch()
-            if a == '[':
-                a = getch()
-                if a == "C":
+        option=''
+        while option != 'x':
+            option = getch()
+            if option == '[':
+                option = getch()
+                if option == "C":
                     system("clear")
                     return page+1 if page+1 <= pages else page
-                if a == "D":
+                if option == "D":
                     system("clear")
                     return page-1 if page > 0 else page
         system("clear")
-        return a
-
+        return option
+    except:
+        system("clear")
+        print(f"{bcolors.FAIL}Não foi possível listar os locais... "
+              f"Tente novamente. {bcolors.ENDC}")
     finally:
         if dao:
             dao.close()

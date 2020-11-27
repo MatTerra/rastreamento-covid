@@ -7,7 +7,9 @@ from utils.entity.usuario import Usuario
 
 def local_submenu(user: Usuario) -> Usuario:
     while True:
-        print("O que você gostaria de fazer?\n")
+        print(f"{bcolors.HEADER}{bcolors.BOLD}"
+              f"O que você gostaria de fazer?"
+              f"{bcolors.ENDC}\n")
         print("\tl - Listar locais")
         print("\tc - Cadastrar um novo local")
         print("\tx - Voltar ao menu principal")

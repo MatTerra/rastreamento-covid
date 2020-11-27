@@ -33,8 +33,10 @@ def add_email(user: Usuario):
 
 
 def remove_email(user: Usuario):
-    print("Qual email você gostaria de remover?")
-    print("\nEmails:")
+    print(f"{bcolors.HEADER}{bcolors.BOLD}"
+          f"Qual email você gostaria de remover?"
+          f"{bcolors.ENDC}\n")
+    print(f"{bcolors.BOLD}Emails:{bcolors.ENDC}")
     for index, email in enumerate(user.emails):
         print(f"\t{index} - {email.email}{'*' if email.primario else ''}")
 
@@ -67,8 +69,6 @@ def remove_email(user: Usuario):
 
 
 def change_birthday(user: Usuario):
-    system("clear")
-
     birthday = ""
     while not isinstance(birthday, date):
         date_input = read_simple_string(
@@ -96,3 +96,25 @@ def change_birthday(user: Usuario):
     finally:
         if dao:
             dao.close()
+
+
+def view_profile(user: Usuario) -> Usuario:
+    print(f"{bcolors.OKBLUE}{bcolors.BOLD}"
+          f"Perfil do usuário:"
+          f"{bcolors.ENDC}\n")
+    print(f"{bcolors.BOLD}\tNome:{bcolors.ENDC}"
+          f"\t\t\t{user.primeiro_nome} {user.ultimo_nome}")
+    print(
+        f"\t{bcolors.BOLD}Data de nascimento:{bcolors.ENDC}"
+        f"\t{user.data_nascimento.strftime('%d/%m/%Y')}")
+    print(f"\t{bcolors.BOLD}Emails:{bcolors.ENDC}")
+    for email in user.emails:
+        print(f"\t\t{f'{bcolors.BOLD}*' if email.primario else '-'} "
+              f"{email.email}{bcolors.ENDC}")
+    print("")
+    print("\t(*) Email primário")
+    print("")
+    print("Pressione qualquer tecla para sair...")
+    input()
+    system("clear")
+    return user
