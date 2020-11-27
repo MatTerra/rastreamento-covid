@@ -4,6 +4,7 @@ from nova_api.dao.generic_sql_dao import GenericSQLDAO
 from nova_api.persistence.postgresql_helper import PostgreSQLHelper
 
 from utils.database.emailDAO import EmailDAO
+from utils.database.telefoneDAO import TelefoneDAO
 from utils.entity.usuario import Usuario
 
 
@@ -35,9 +36,12 @@ class UsuarioDAO(GenericSQLDAO):
     def create(self, entity: Usuario) -> str:
         super(UsuarioDAO, self).create(entity)
         email_dao = EmailDAO(database_instance=self.database)
+        telefone_dao = TelefoneDAO(database_instance=self.database)
         try:
             for email in entity.emails:
                 email_dao.create(email)
+            for telefone in entity.telefones:
+                telefone_dao.create(telefone)
         except:
             self.remove(entity)
             raise IOError("Not able to insert user")
