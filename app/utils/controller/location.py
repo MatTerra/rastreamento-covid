@@ -45,10 +45,7 @@ def view_locais(page: int = 0):
         system("clear")
         total, locais = dao.get_all(length=itens_per_page,
                                     offset=page*itens_per_page)
-        if total > 0:
-            pages = (total-1)//itens_per_page
-        else:
-            pages = 0
+        pages = (total-1)//itens_per_page if total > 0 else 0
         if page > pages:
             system("clear")
             print(f"{bcolors.WARNING}A página {page} não está disponível,"
