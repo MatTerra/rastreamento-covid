@@ -5,8 +5,10 @@ from utils.colors import bcolors
 from utils.input import read_simple_string
 from utils.database.emailDAO import EmailDAO
 from utils.database.usuarioDAO import UsuarioDAO
+from utils.database.telefoneDAO import TelefoneDAO
 from utils.entity.email import Email
 from utils.entity.usuario import Usuario
+from utils.entity.telefone import Telefone
 
 
 def add_email(user: Usuario):
@@ -67,6 +69,27 @@ def remove_email(user: Usuario):
         if dao:
             dao.close()
 
+def add_telefone(user: Usuario):
+    new_telefone_number = read_simple_string("Novo telefone")
+    new_telefone = Telefone(telefone=new_telefone_number, usuario_id_=user.id_)
+
+    dao = None
+    try:
+        dao = TelefoneDAO()
+        dao.create(new_telefone)
+        system("clear")
+        print(
+            f"{bcolors.OKGREEN}Novo telefone inserido com sucesso!{bcolors.ENDC}")
+    except Exception as e:
+        system("clear")
+        print(f"{bcolors.FAIL}Ocorreu um erro ao inserir o novo telefone... "
+              f"Por favor tente novamente.{bcolors.ENDC}")
+        print(str(e))
+    finally:
+        if dao:
+            dao.close()
+
+    user.telefones.append(new_telefone)
 
 def change_birthday(user: Usuario):
     birthday = ""
@@ -111,6 +134,9 @@ def view_profile(user: Usuario) -> Usuario:
     for email in user.emails:
         print(f"\t\t{f'{bcolors.BOLD}*' if email.primario else '-'} "
               f"{email.email}{bcolors.ENDC}")
+    print(f"\t{bcolors.BOLD}Telefones:{bcolors.ENDC}")
+    for telefone in user.telefones:
+        print(f"\t\t-{telefone.telefone}{bcolors.ENDC}")
     print("")
     print("\t(*) Email primário")
     print("")
