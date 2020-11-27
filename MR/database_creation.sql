@@ -92,7 +92,7 @@ CREATE TABLE IF NOT EXISTS local (
 DROP TABLE IF EXISTS checkin ;
 
 CREATE TABLE IF NOT EXISTS checkin (
-  checkin_id_ SERIAL NOT NULL,
+  checkin_id_ CHAR(32) NOT NULL,
   checkin_id_usuario CHAR(32) NOT NULL,
   checkin_local_id_ CHAR(32) NOT NULL,
   checkin_risco INT NOT NULL DEFAULT 0,
@@ -118,9 +118,9 @@ CREATE TABLE IF NOT EXISTS checkin (
 DROP TABLE IF EXISTS notificacao ;
 
 CREATE TABLE IF NOT EXISTS notificacao (
-  notificacao_id_ SERIAL NOT NULL,
+  notificacao_id_ CHAR(32) NOT NULL,
   notificacao_checkin_id_ CHAR(32) NOT NULL,
-  notificacao_hash_usuario CHAR(256) NOT NULL,
+  notificacao_usuario_id_ CHAR(256) NOT NULL,
   notificacao_recebida BOOLEAN NOT NULL DEFAULT FALSE,
   PRIMARY KEY (notificacao_id_),
   CONSTRAINT fk_notificacao_checkin
