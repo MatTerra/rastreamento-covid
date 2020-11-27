@@ -263,9 +263,9 @@ CREATE TABLE IF NOT EXISTS contratacao (
 DROP TABLE IF EXISTS emissor ;
 
 CREATE TABLE IF NOT EXISTS emissor (
-  emissor_id_ INT NOT NULL,
-  nome VARCHAR(45) NOT NULL,
-  local VARCHAR(256) NOT NULL,
+  emissor_id_ CHAR(32) NOT NULL,
+  emissor_nome VARCHAR(45) NOT NULL,
+  emissor_local VARCHAR(256) NOT NULL,
   PRIMARY KEY (emissor_id_))
 ;
 
@@ -277,7 +277,7 @@ DROP TABLE IF EXISTS diagnostico ;
 
 CREATE TABLE IF NOT EXISTS diagnostico (
   diagnostico_usuario_id_ CHAR(32) NOT NULL,
-  diagnostico_emissor_id_ INT NOT NULL,
+  diagnostico_emissor_id_ CHAR(32) NOT NULL,
   diagnostico_data_exame DATE NOT NULL,
   diagnostico_data_inicio_sintomas DATE NOT NULL,
   diagnostico_data_fim_sintomas DATE NULL,
