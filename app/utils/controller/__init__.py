@@ -4,6 +4,7 @@ from utils.colors import bcolors
 from utils.controller.authentication import logout
 import utils.controller.profile
 import view.submenus.profile
+import view.submenus.location
 
 __all__ = ["authentication", "profile", "location", "actions"]
 
@@ -19,5 +20,7 @@ actions = {"p": {"name": "Visualizar perfil",
                  "function": view.submenus.profile.view_profile},
            "e": {"name": "Editar perfil",
                  "function": view.submenus.profile.edit_profile},
+           "l": {"name": "Locais",
+                 "function": view.submenus.location.local_submenu},
            "x": {"name": "Sair",
                  "function": logout}}

@@ -4,7 +4,7 @@ from utils.controller import actions
 
 
 def main_menu() -> str:
-    print("O que você gostaria de fazer?")
+    print("O que você gostaria de fazer?\n")
     for key, action in actions.items():
         print(f"\t{key} - {action.get('name', '...')}")
     action = input(">> ").strip()
