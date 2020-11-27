@@ -2,7 +2,7 @@ from os import system
 
 from utils.colors import bcolors
 from utils.controller.profile import add_email, change_birthday, \
-    remove_email, view_profile
+    remove_email, view_profile, add_telefone
 from utils.entity.usuario import Usuario
 
 
@@ -14,6 +14,7 @@ def edit_profile_submenu(user: Usuario) -> Usuario:
         print("\ta - Adicionar email secundário")
         print("\tr - Remover email")
         print("\td - Data de nascimento")
+        print("\tt - Adicional telefone")
         print("\tx - Voltar")
         choice = input(">> ")
         if choice == 'a':
@@ -23,6 +24,8 @@ def edit_profile_submenu(user: Usuario) -> Usuario:
             remove_email(user)
         elif choice == 'd':
             change_birthday(user)
+        elif choice == 't':
+            add_telefone(user)
         elif choice == 'x':
             system("clear")
             return user
