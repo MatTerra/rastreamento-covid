@@ -134,6 +134,9 @@ def view_profile(user: Usuario) -> Usuario:
     for email in user.emails:
         print(f"\t\t{f'{bcolors.BOLD}*' if email.primario else '-'} "
               f"{email.email}{bcolors.ENDC}")
+    print(f"\t{bcolors.BOLD}Telefones:{bcolors.ENDC}")
+    for telefone in user.telefones:
+        print(f"\t\t-{telefone.telefone}{bcolors.ENDC}")
     print("")
     print("\t(*) Email primário")
     print("")

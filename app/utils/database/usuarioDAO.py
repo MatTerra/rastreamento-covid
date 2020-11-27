@@ -21,6 +21,7 @@ class UsuarioDAO(GenericSQLDAO):
         total, results = super().get_all(length, offset, filters)
 
         email_dao = EmailDAO(database_instance=self.database)
+        telefone_dao = TelefoneDAO(database_instance=self.database)
 
         for result in results:
             n_emails = 21
@@ -30,6 +31,14 @@ class UsuarioDAO(GenericSQLDAO):
                 print(emails)
                 n_emails = len(emails)
                 result.emails.extend(emails)
+            n_telefones = 21
+            while n_telefones >= 20:
+                _, telefones = telefone_dao.get_all(
+                    filters={"usuario_id_": result.id_}
+                )
+                print(telefones)
+                n_telefones = len(telefones)
+                result.telefones.extend(telefones)
 
         return total, results
 
@@ -66,6 +75,7 @@ class UsuarioDAO(GenericSQLDAO):
         return_list = [self.return_class(*result) for result in results]
 
         email_dao = EmailDAO(database_instance=self.database)
+        telefone_dao = TelefoneDAO(database_instance=self.database)
 
         for result in return_list:
             n_emails = 21
@@ -75,5 +85,13 @@ class UsuarioDAO(GenericSQLDAO):
                 print(emails)
                 n_emails = len(emails)
                 result.emails.extend(emails)
+            n_telefones = 21
+            while n_telefones >= 20:
+                _, telefones = telefone_dao.get_all(
+                    filters={"usuario_id_": result.id_}
+                )
+                print(telefones)
+                n_telefones = len(telefones)
+                result.telefones.extend(telefones)
 
         return return_list[0]
