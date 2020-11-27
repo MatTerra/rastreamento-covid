@@ -1,9 +1,13 @@
 from dataclasses import dataclass, Field, fields
 from datetime import date, datetime
 
+from nova_api.entity import Entity
+
 
 @dataclass
 class Base:
+    id_: str = None
+
     @staticmethod
     def _serialize_field(field_: Field):
         """
@@ -11,6 +15,8 @@ class Base:
         :param field_:
         :return:
         """
+        if isinstance(field_, Base):
+            return field_.id_
         if isinstance(field_, datetime):
             return field_.strftime("%Y-%m-%d %H:%M:%S")
         if isinstance(field_, date):

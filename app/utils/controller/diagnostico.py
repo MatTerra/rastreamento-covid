@@ -1,0 +1,113 @@
+from os import system
+
+from getch import getch
+
+from utils.colors import bcolors
+from utils.controller.emissor import select_emissor
+from utils.database.diagnosticoDAO import DiagnosticoDAO
+from utils.entity.diagnostico import Diagnostico
+from utils.entity.emissor import Emissor
+from utils.entity.usuario import Usuario
+from utils.input import read_nullable_date, read_simple_date
+
+itens_per_page = 1
+
+
+def view_diagnosticos(page):
+    dao = None
+    try:
+        dao = DiagnosticoDAO()
+        system("clear")
+        total, diagnosticos = dao.get_all(length=itens_per_page,
+                                          offset=page * itens_per_page)
+        pages = (total - 1) // itens_per_page
+        if pages < 0:
+            pages = 0
+        if page > pages:
+            system("clear")
+            print(f"{bcolors.WARNING}A página {page} não está disponível,"
+                  f" mostrando a última página disponível.{bcolors.ENDC}")
+            return pages
+        print(f"{bcolors.OKBLUE}{bcolors.BOLD}"
+              f"Diagnósticos:"
+              f"{bcolors.ENDC}\n")
+        print(f"{bcolors.OKCYAN}"
+              f"|{'ID Usuário':^32}|{'Emissor':^30}|{'Data Exame':^10}"
+              f"|{'In. Sint.':^10}|{'Fim Sint.':^10}|{'Fim Diag.':^10}|"
+              f"{bcolors.ENDC}")
+        for diagnostico in diagnosticos:
+            print(f"|{diagnostico.usuario.id_:^32}|"
+                  f"{diagnostico.emissor.nome:^30}"
+                  f"|{diagnostico.data_exame:^10}|"
+                  f"{diagnostico.data_inicio_sintomas:^10}|"
+                  f"{diagnostico.data_fim_sintomas:^10}|"
+                  f"{diagnostico.data_recuperacao:^10}|")
+        for i in range(itens_per_page - len(diagnosticos)):
+            print(f"|{'-':^32}|{'-':^30}|{'-':^10}"
+                  f"|{'-':^10}|{'-':^10}|{'-':^10}|")
+        print("\n\t  ", end="")
+        for i in range(pages + 1):
+            print(i, end=' ')
+        print("\n", "\t", " " * page * 2, '^')
+        print("Pressione -> para próxima página")
+        print("Pressione <- para a página anterior")
+        print("Pressione x para sair da listagem")
+        option = ''
+        while option != 'x':
+            option = getch()
+            if option == '[':
+                option = getch()
+                if option == "C":
+                    system("clear")
+                    return page + 1 if page + 1 <= pages else page
+                if option == "D":
+                    system("clear")
+                    return page - 1 if page > 0 else page
+        system("clear")
+        return option
+    except:
+        system("clear")
+        print(f"{bcolors.FAIL}Não foi possível listar os diagnosticos... "
+              f"Tente novamente. {bcolors.ENDC}")
+    finally:
+        if dao:
+            dao.close()
+
+
+def create_diagnostico(user: Usuario):
+    system("clear")
+    print(f"{bcolors.OKCYAN}{bcolors.BOLD}"
+          f"Vamos cadastrar um novo diagnóstico!"
+          f"{bcolors.ENDC}\n")
+    print(f"{bcolors.HEADER}{bcolors.BOLD}"
+          f"Por favor preencha os dados abaixo:"
+          f"{bcolors.ENDC}\n")
+    exam_date = read_simple_date("Data do exame")
+    symptoms_date = read_simple_date("Data de início dos sintomas")
+    end_symptoms_date = read_nullable_date("Data de fim dos sintomas")
+    recovery_date = read_nullable_date("Data final do caso")
+
+    emissor = 0
+    while not isinstance(emissor, Emissor):
+        emissor = select_emissor(emissor)
+
+    dao = None
+    try:
+        dao = DiagnosticoDAO()
+        diagnostico = Diagnostico(usuario=user, emissor=emissor,
+                                  data_exame=exam_date,
+                                  data_inicio_sintomas=symptoms_date,
+                                  data_fim_sintomas=end_symptoms_date,
+                                  data_recuperacao=recovery_date)
+        dao.create(diagnostico)
+        system("clear")
+        print(
+            f"{bcolors.OKGREEN}Diagnóstico cadastrado com sucesso!"
+            f"{bcolors.ENDC}")
+    except:
+        system("clear")
+        print(f"{bcolors.FAIL}Não foi possível guardar este diagnóstico... "
+              f"Tente novamente.{bcolors.ENDC}")
+    finally:
+        if dao:
+            dao.close()

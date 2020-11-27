@@ -2,7 +2,7 @@ from datetime import date, datetime
 from os import system
 
 from utils.colors import bcolors
-from utils.input import read_simple_string
+from utils.input import read_simple_date, read_simple_string
 from utils.database.emailDAO import EmailDAO
 from utils.database.usuarioDAO import UsuarioDAO
 from utils.database.telefoneDAO import TelefoneDAO
@@ -69,6 +69,7 @@ def remove_email(user: Usuario):
         if dao:
             dao.close()
 
+
 def add_telefone(user: Usuario):
     new_telefone_number = read_simple_string("Novo telefone")
     new_telefone = Telefone(telefone=new_telefone_number, usuario_id_=user.id_)
@@ -79,7 +80,8 @@ def add_telefone(user: Usuario):
         dao.create(new_telefone)
         system("clear")
         print(
-            f"{bcolors.OKGREEN}Novo telefone inserido com sucesso!{bcolors.ENDC}")
+            f"{bcolors.OKGREEN}Novo telefone inserido com sucesso!"
+            f"{bcolors.ENDC}")
     except Exception as e:
         system("clear")
         print(f"{bcolors.FAIL}Ocorreu um erro ao inserir o novo telefone... "
@@ -91,18 +93,12 @@ def add_telefone(user: Usuario):
 
     user.telefones.append(new_telefone)
 
+
 def change_birthday(user: Usuario):
     birthday = ""
     while not isinstance(birthday, date):
-        date_input = read_simple_string(
-            "Data de nascimento (dd/mm/AAAA)")
-        try:
-            birthday = datetime.strptime(date_input, "%d/%m/%Y")
-            if birthday.timestamp() > datetime.now().timestamp():
-                birthday = ""
-                raise ValueError
-        except ValueError:
-            print(f"{bcolors.FAIL}Data inválida!{bcolors.ENDC}")
+        date_input = read_simple_date(
+            "Data de nascimento")
 
     dao = None
     try:

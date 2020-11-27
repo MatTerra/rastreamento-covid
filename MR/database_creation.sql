@@ -119,7 +119,7 @@ DROP TABLE IF EXISTS notificacao ;
 
 CREATE TABLE IF NOT EXISTS notificacao (
   notificacao_id_ SERIAL NOT NULL,
-  notificacao_checkin_id_ INT NOT NULL,
+  notificacao_checkin_id_ CHAR(32) NOT NULL,
   notificacao_hash_usuario CHAR(256) NOT NULL,
   notificacao_recebida BOOLEAN NOT NULL DEFAULT FALSE,
   PRIMARY KEY (notificacao_id_),
@@ -152,7 +152,7 @@ DROP TABLE IF EXISTS caso_sintoma ;
 CREATE TABLE IF NOT EXISTS caso_sintoma (
   caso_sintoma_id_ CHAR(32) NOT NULL,
   caso_sintoma_usuario_id_ CHAR(32) NOT NULL,
-  caso_sintoma_sintoma_id_ INT NOT NULL,
+  caso_sintoma_sintoma_id_ CHAR(32) NOT NULL,
   caso_sintoma_inicio TIMESTAMP NOT NULL,
   caso_sintoma_final TIMESTAMP NULL,
   PRIMARY KEY (caso_sintoma_id_),
@@ -175,7 +175,7 @@ CREATE TABLE IF NOT EXISTS caso_sintoma (
 DROP TABLE IF EXISTS medicamento ;
 
 CREATE TABLE IF NOT EXISTS medicamento (
-  medicamento_id_ INT NOT NULL,
+  medicamento_id_ CHAR(32) NOT NULL,
   medicamento_nome VARCHAR(45) NOT NULL,
   PRIMARY KEY (medicamento_id_))
 ;
@@ -199,7 +199,7 @@ CREATE TABLE IF NOT EXISTS medico (
 DROP TABLE IF EXISTS tratamento ;
 
 CREATE TABLE IF NOT EXISTS tratamento (
-  tratamento_medicamento_id_ INT NOT NULL,
+  tratamento_medicamento_id_ CHAR(32) NOT NULL,
   tratamento_medico_id_ CHAR(32) NOT NULL,
   tratamento_usuario_id_ CHAR(32) NOT NULL,
   tratamento_posologia VARCHAR(45) NOT NULL,

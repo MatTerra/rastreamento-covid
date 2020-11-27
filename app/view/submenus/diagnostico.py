@@ -1,6 +1,8 @@
 from os import system
 
 from utils.colors import bcolors
+from utils.controller.diagnostico import create_diagnostico, \
+    view_diagnosticos
 from utils.entity.usuario import Usuario
 from utils.controller.emissor import create_emissor, view_emissores
 
@@ -12,6 +14,8 @@ def diagnostico_submenu(user: Usuario) -> Usuario:
               f"{bcolors.ENDC}\n")
         print("\tle - Listar emissores de diagnóstico")
         print("\tc - Cadastrar um novo emissor de diagnóstico")
+        print("\td - Informar um diagnóstico")
+        print("\tld - Listar diagnósticos")
         print("\tx - Voltar ao menu principal")
         option = input(" >> ")
         if option == 'le':
@@ -22,6 +26,14 @@ def diagnostico_submenu(user: Usuario) -> Usuario:
         elif option == 'c':
             system("clear")
             create_emissor()
+        elif option == 'd':
+            system("clear")
+            create_diagnostico(user)
+        elif option == 'ld':
+            pagina = 0
+            while pagina != 'x':
+                system("clear")
+                pagina = view_diagnosticos(pagina)
         elif option == 'x':
             system("clear")
             return user
