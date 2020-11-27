@@ -1,3 +1,4 @@
+from datetime import date
 from os import system
 
 from getch import getch
@@ -10,10 +11,10 @@ from utils.entity.emissor import Emissor
 from utils.entity.usuario import Usuario
 from utils.input import read_nullable_date, read_simple_date
 
-itens_per_page = 1
+itens_per_page = 2
 
 
-def view_diagnosticos(page):
+def view_diagnosticos(page: int):
     dao = None
     try:
         dao = DiagnosticoDAO()
@@ -32,19 +33,20 @@ def view_diagnosticos(page):
               f"Diagnósticos:"
               f"{bcolors.ENDC}\n")
         print(f"{bcolors.OKCYAN}"
-              f"|{'ID Usuário':^32}|{'Emissor':^30}|{'Data Exame':^10}"
-              f"|{'In. Sint.':^10}|{'Fim Sint.':^10}|{'Fim Diag.':^10}|"
+              f"|{'ID Usuário':^32}|{'Emissor':^30}|{'Dia Exame':^9}"
+              f"|{'In. Sint.':^9}|{'Fim Sint.':^9}|{'Fim Diag.':^9}|"
               f"{bcolors.ENDC}")
         for diagnostico in diagnosticos:
+
             print(f"|{diagnostico.usuario.id_:^32}|"
                   f"{diagnostico.emissor.nome:^30}"
-                  f"|{diagnostico.data_exame:^10}|"
-                  f"{diagnostico.data_inicio_sintomas:^10}|"
-                  f"{diagnostico.data_fim_sintomas:^10}|"
-                  f"{diagnostico.data_recuperacao:^10}|")
+                  f"|{diagnostico.data_exame.strftime('%d/%m/%y'):>9}|"
+                  f"{diagnostico.data_inicio_sintomas.strftime('%d/%m/%y'):>9}|"
+                  f"{diagnostico.data_fim_sintomas.strftime('%d/%m/%y') if diagnostico.data_fim_sintomas else '-':>9}|"
+                  f"{diagnostico.data_recuperacao.strftime('%d/%m/%y') if diagnostico.data_recuperacao else '-':>9}|")
         for i in range(itens_per_page - len(diagnosticos)):
-            print(f"|{'-':^32}|{'-':^30}|{'-':^10}"
-                  f"|{'-':^10}|{'-':^10}|{'-':^10}|")
+            print(f"|{'-':^32}|{'-':^30}|{'-':^9}"
+                  f"|{'-':^9}|{'-':^9}|{'-':^9}|")
         print("\n\t  ", end="")
         for i in range(pages + 1):
             print(i, end=' ')
@@ -65,7 +67,9 @@ def view_diagnosticos(page):
                     return page - 1 if page > 0 else page
         system("clear")
         return option
-    except:
+    except Exception as e:
+        print(e)
+        input()
         system("clear")
         print(f"{bcolors.FAIL}Não foi possível listar os diagnosticos... "
               f"Tente novamente. {bcolors.ENDC}")

@@ -12,7 +12,7 @@ from utils.entity.usuario import Usuario
 
 
 class DiagnosticoDAO(GenericSQLDAO):
-    SELECT_QUERY = "SELECT {fields} FROM `{table}` " \
+    SELECT_QUERY = "SELECT {fields} FROM {table} " \
                    "LEFT JOIN usuario " \
                    "ON diagnostico_usuario_id_ = usuario_id_ " \
                    "LEFT JOIN emissor " \
@@ -43,10 +43,10 @@ class DiagnosticoDAO(GenericSQLDAO):
         fields.remove(self.fields['usuario'])
         fields.remove(self.fields['emissor'])
 
-        query = self.database.SELECT_QUERY.format(
-            fields=', '.join(self.fields.values() +
-                             usuario_dao.fields.values() +
-                             emissor_dao.fields.values()),
+        query = self.SELECT_QUERY.format(
+            fields=', '.join(fields +
+                             list(usuario_dao.fields.values()) +
+                             list(emissor_dao.fields.values())),
             table=self.table,
             filters=filters_
         )
@@ -65,18 +65,21 @@ class DiagnosticoDAO(GenericSQLDAO):
 
         return_list = []
         for result in results:
+            field_names = list(self.fields.keys())
+            field_names.remove('usuario')
+            field_names.remove('emissor')
             values = {field: value
-                      for field, value in zip(fields,
+                      for field, value in zip(field_names,
                                               result[:len(fields) + 1])}
             values['usuario'] = Usuario(
-                *result[len(fields):len(fields)+len(usuario_dao.fields)+1])
+                *result[len(field_names):len(field_names)+len(usuario_dao.fields)+1])
             values['emissor'] = Emissor(
-                *result[len(fields) + len(usuario_dao.fields):])
+                *result[len(field_names) + len(usuario_dao.fields):])
             return_list.append(Diagnostico(**values))
 
         query_total = self.database.QUERY_TOTAL_COLUMN.format(
             table=self.table,
-            column=self.fields['id_'])
+            column=self.fields['usuario'])
 
         self.database.query(query_total)
         total = self.database.get_results()[0][0]
@@ -84,7 +87,7 @@ class DiagnosticoDAO(GenericSQLDAO):
                           results,
                           total)
 
-        return total, results
+        return total, return_list
 
     def get(self, id_: str) -> List[Diagnostico]:
         _, results = self.get_all(filters={"usuario": id_})
