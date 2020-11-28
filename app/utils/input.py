@@ -14,7 +14,7 @@ def read_simple_string(prop_name: str):
     return result
 
 
-def read_simple_date(prop_name: str):
+def read_simple_date(prop_name: str) -> date:
     result = ""
     while not isinstance(result, date):
         result = input(f" {bcolors.BOLD}"
@@ -30,7 +30,7 @@ def read_simple_date(prop_name: str):
     return result
 
 
-def read_nullable_date(prop_name: str):
+def read_nullable_date(prop_name: str) -> date:
     result = ""
     while not isinstance(result, date):
         result = input(f" {bcolors.BOLD}"

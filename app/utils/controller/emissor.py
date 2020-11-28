@@ -47,7 +47,7 @@ def select_emissor(page: int = 0) -> Emissor:
         system("clear")
         total, emissores = dao.get_all(length=itens_per_page,
                                     offset=page*itens_per_page)
-        pages = (total-1)//itens_per_page if total > 0 else 0
+        pages = (total-1)//itens_per_page
         if pages < 0:
             pages = 0
         if page > pages:
@@ -84,7 +84,7 @@ def select_emissor(page: int = 0) -> Emissor:
                 if option == "D":
                     system("clear")
                     return page-1 if page > 0 else page
-            elif option in [str(i) for i in range(itens_per_page)]:
+            elif option in [str(i) for i in range(len(emissores))]:
                 return emissores[int(option)]
         system("clear")
         return option

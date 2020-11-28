@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import List
 
 from nova_api.dao.generic_sql_dao import GenericSQLDAO
@@ -128,4 +129,54 @@ class DiagnosticoDAO(GenericSQLDAO):
 
         self.logger.info("Entity created as %s", entity)
 
+        return entity.id_
+
+    def update(self, entity: Diagnostico) -> str:
+        """
+        Updates an entity on the database.
+
+        :param entity: The entity with updated values to update on \
+        the database.
+        :return: The id_ of the updated entity.
+        """
+        if not isinstance(entity, self.return_class):
+            self.logger.error("Entity was not passed as an instance to update."
+                              " Value received: %s", entity)
+            raise TypeError(
+                "Entity must be a {return_class} object!".format(
+                    return_class=self.return_class
+                )
+            )
+
+        if self.get_all(length=1, offset=0,
+                        filters={"usuario": entity.usuario.id_,
+                                 "emissor": entity.emissor.id_})[1][0] is None:
+            self.logger.error("Entity was not found in database to update."
+                              " Value received: %s", entity)
+            raise AssertionError("Entity doesn't exists in database!")
+
+        ent_values = entity.get_db_values()
+
+        query = self.database.UPDATE_QUERY.format(
+            table=self.table,
+            fields=', '.join(
+                [field + '=%s' for field in
+                 self.fields.values()]),
+            column=f"diagnostico_usuario_id_ = %s AND diagnostico_emissor_id_"
+        )
+
+        self.logger.debug("Running query in database: %s and params %s",
+                          query,
+                          ent_values + [entity.usuario.id_,
+                                        entity.emissor.id_])
+        row_count, _ = self.database.query(query,
+                                           ent_values + [entity.usuario.id_,
+                                                         entity.emissor.id_])
+
+        if row_count == 0:
+            self.logger.error("No rows were affected in database during "
+                              "update!")
+            raise NoRowsAffectedException()
+
+        self.logger.info("Entity updated to %s", entity)
         return entity.id_
