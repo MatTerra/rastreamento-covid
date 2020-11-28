@@ -14,5 +14,5 @@ class Checkin(Base):
     inicio: datetime = field(default_factory=datetime.now)
     final: datetime = field(default_factory=datetime.now)
 
-    usuario_id_: str = None
+    id_usuario: str = None
     local_id_: str = None

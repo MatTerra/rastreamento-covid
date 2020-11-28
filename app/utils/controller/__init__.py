@@ -6,6 +6,7 @@ import utils.controller.profile
 import view.submenus.profile
 import view.submenus.location
 import view.submenus.diagnostico
+import view.submenus.checkin
 
 __all__ = ["authentication", "profile", "location", "actions"]
 
@@ -23,5 +24,8 @@ actions = {"p": {"name": "Perfil",
                  "function": view.submenus.location.local_submenu},
            "d": {"name": "Diagnóstico",
                  "function": view.submenus.diagnostico.diagnostico_submenu},
+           "c": {"name": "Checkin",
+                 "function": view.submenus.checkin.checkin_menu},
            "x": {"name": "Sair",
-                 "function": logout}}
+                 "function": logout}
+          }
