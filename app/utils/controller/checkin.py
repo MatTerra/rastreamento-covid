@@ -11,6 +11,7 @@ from utils.entity.usuario import Usuario
 from utils.input import read_simple_string
 
 itens_per_page = 5
+datetime_format = "%d/%m/%y-%H:%M"
 
 def select_local_checkin():
     dao = None
@@ -71,15 +72,19 @@ def select_local_checkin():
                     option = getch()
                     if option == "C":
                         system("clear")
+                        if page == pages and selected_local == total%itens_per_page-1:
+                            break
                         if selected_local == itens_per_page-1:
-                            page = (page + 1) % pages if pages > 0 else 0
-                        selected_local = (selected_local + 1) % total
+                            page = (page + 1) % (pages+1) if pages > 0 else 0
+                        selected_local = (selected_local + 1) % itens_per_page
                         break
                     if option == "D":
                         system("clear")
+                        if page == 0 and selected_local == 0:
+                            break
                         if selected_local == 0:
-                            page = (page - 1) % pages if pages > 0 else 0
-                        selected_local = (selected_local - 1) % total
+                            page = (page - 1) % (pages+1) if pages > 0 else 0
+                        selected_local = (selected_local - 1) % itens_per_page
                         break
             if option == 's':
                 system("clear")
@@ -87,6 +92,8 @@ def select_local_checkin():
             elif option == 'x':
                 system("clear")
                 return -1
+            if dao:
+                dao.close()
     except Exception as e:
         system("clear")
         raise e
@@ -121,7 +128,7 @@ def create_checkin(user: Usuario):
             f"(digite uma data no formato dd/mm/yy HH:MM. Exemplo: 03/02/20-16:05)"
             f"{bcolors.ENDC}\n")
         try:
-            inicio_checkin = datetime.strptime( input(">> ").strip(), "%d/%m/%y-%H:%M")
+            inicio_checkin = datetime.strptime( input(">> ").strip(), datetime_format)
         except KeyboardInterrupt:
             return
         except Exception as e:
@@ -138,7 +145,12 @@ def create_checkin(user: Usuario):
             f"(digite uma data no formato dd/mm/yy HH:MM. Exemplo: 03/02/20-16:05)"
             f"{bcolors.ENDC}\n")
         try:
-            final_checkin = datetime.strptime(input(">> ").strip(), "%d/%m/%y-%H:%M")
+            final_checkin = datetime.strptime(input(">> ").strip(), datetime_format)
+
+            if final_checkin < inicio_checkin:
+                print(f"{bcolors.WARNING}"
+                f"Ops, a data que você digitou é anterior à data de inicio.\nPor favor, digite novamente uma data válida."
+                f"{bcolors.ENDC}\n")
         except KeyboardInterrupt:
             return
         except:
@@ -172,7 +184,7 @@ def view_checkins(page: int, user: Usuario):
         total, checkins = dao.get_all(length=itens_per_page,
                                         offset=page*itens_per_page,
                                         filters={
-                                                "checkin_id_usuario": user.id_
+                                                "id_usuario": user.id_
                                             })
         pages = (total-1)//itens_per_page
         if pages < 0:
@@ -186,11 +198,14 @@ def view_checkins(page: int, user: Usuario):
               f"Seus checkins:"
               f"{bcolors.ENDC}\n")
         print(f"{bcolors.OKCYAN}"
-              f"|{'Local':^30}|{'inicio':^20}|{'final':^20}|"
+              f"|{'Local':^30}|{'Inicio':^20}|{'Final':^20}|"
               f"{bcolors.ENDC}")
+        local_dao = LocalDAO()
         for checkin in checkins:
-            print(f"|{checkin.local_id_:^30}|{checkin.inicio:^20}"
-                  f"|{checkin.final:^20}|")
+            nome_local = local_dao.get(checkin.local_id_).nome
+            print(f"|{nome_local:^30}|{checkin.inicio.strftime(datetime_format):^20}"
+                  f"|{checkin.final.strftime(datetime_format):^20}|")
+        local_dao.close()
         for i in range(itens_per_page - len(checkins)):
             print(f"|{'-':^30}|{'-':^20}"
                   f"|{'-':^20}|")
@@ -217,7 +232,7 @@ def view_checkins(page: int, user: Usuario):
     except Exception as e:
         system("clear")
         print(f"{bcolors.FAIL}Não foi possível listar os checkins... "
-              f"Tente novamente. {bcolors.ENDC}")
+              f"Tente novamente. {str(e)}{bcolors.ENDC}")
     finally:
         if dao:
             dao.close()

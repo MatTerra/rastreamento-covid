@@ -15,7 +15,7 @@ def checkin_menu(user: Usuario):
         if option == 'l':
             pagina = 0
             while pagina != 'x':
-                system("clear")
+                # system("clear")
                 pagina = view_checkins(pagina, user)
         elif option == 'c':
             create_checkin(user)
