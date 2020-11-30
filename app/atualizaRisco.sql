@@ -16,7 +16,7 @@ BEGIN
     FOR reg IN SELECT *
     FROM checkin WHERE checkin_id_usuario = new.diagnostico_usuario_id_
                        AND DATE(checkin_inicio) < new.diagnostico_data_recuperacao
-                       AND DATE(checkin_final) > new.diagnostico_exame LOOP
+                       AND DATE(checkin_final) > new.diagnostico_data_exame LOOP
         raise notice 'UPDATING RISKS for exam';
         UPDATE checkin SET checkin_risco = checkin_risco + 1
         WHERE checkin_local_id_=reg.checkin_local_id_

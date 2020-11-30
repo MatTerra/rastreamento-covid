@@ -198,16 +198,17 @@ def view_checkins(page: int, user: Usuario):
               f"Seus checkins:"
               f"{bcolors.ENDC}\n")
         print(f"{bcolors.OKCYAN}"
-              f"|{'Local':^30}|{'Inicio':^20}|{'Final':^20}|"
+              f"|{'Local':^30}|{'Risco':^5}|{'Inicio':^20}|{'Final':^20}|"
               f"{bcolors.ENDC}")
         local_dao = LocalDAO()
         for checkin in checkins:
             nome_local = local_dao.get(checkin.local_id_).nome
-            print(f"|{nome_local:^30}|{checkin.inicio.strftime(datetime_format):^20}"
+            print(f"|{nome_local:^30}|{checkin.risco:^5}|"
+                  f"{checkin.inicio.strftime(datetime_format):^20}"
                   f"|{checkin.final.strftime(datetime_format):^20}|")
         local_dao.close()
         for i in range(itens_per_page - len(checkins)):
-            print(f"|{'-':^30}|{'-':^20}"
+            print(f"|{'-':^30}|{'-':^5}|{'-':^20}"
                   f"|{'-':^20}|")
         print("\n\t  ", end="")
         for i in range(pages+1):
