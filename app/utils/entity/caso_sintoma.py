@@ -12,4 +12,4 @@ class CasoSintoma(Base):
     usuario_id_: str = field(default="")
     sintoma_id_: int = field(default=0)
     inicio: date = field(default_factory=date.today)
-    final: date = field(default_factory=date.today)
+    final: date = field(default=None)
