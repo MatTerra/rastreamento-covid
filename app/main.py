@@ -31,7 +31,7 @@ if __name__ == "__main__":
             action = ''
             while user:
                 try:
-                    action = main_menu()
+                    action = main_menu(user)
                     os.system("clear")
                     if action not in actions.keys():
                         raise ValueError(action)

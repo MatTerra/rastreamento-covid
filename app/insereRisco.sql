@@ -18,7 +18,7 @@ BEGIN
 
     SELECT INTO sintomaticos COUNT(checkin_id_)
     FROM checkin_com_sintomas
-    WHERE checkin_id_ == new.checkin_id_;
+    WHERE checkin_id_ = new.checkin_id_;
     IF (sintomaticos <> 0) THEN
         UPDATE checkin SET checkin_risco = checkin_risco+4
         WHERE checkin_id_ <> new.checkin_id_
@@ -28,7 +28,7 @@ BEGIN
 
     SELECT INTO diagnosticados COUNT(checkin_id_)
     FROM checkin_com_diagnostico
-    WHERE checkin_id_ == new.checkin_id_;
+    WHERE checkin_id_ = new.checkin_id_;
     IF (diagnosticados <> 0) THEN
         UPDATE checkin SET checkin_risco = checkin_risco+1
         WHERE checkin_id_ <> new.checkin_id_
