@@ -118,11 +118,9 @@ CREATE TABLE IF NOT EXISTS checkin (
 DROP TABLE IF EXISTS notificacao ;
 
 CREATE TABLE IF NOT EXISTS notificacao (
-  notificacao_id_ CHAR(32) NOT NULL,
   notificacao_checkin_id_ CHAR(32) NOT NULL,
-  notificacao_usuario_id_ CHAR(256) NOT NULL,
   notificacao_recebida BOOLEAN NOT NULL DEFAULT FALSE,
-  PRIMARY KEY (notificacao_id_),
+  PRIMARY KEY (notificacao_checkin_id_),
   CONSTRAINT fk_notificacao_checkin
     FOREIGN KEY (notificacao_checkin_id_)
     REFERENCES checkin (checkin_id_)

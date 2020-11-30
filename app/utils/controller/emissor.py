@@ -64,7 +64,7 @@ def select_emissor(page: int = 0) -> Emissor:
         for index, emissor in enumerate(emissores):
             print(f"|{index:^6}|{emissor.nome:^30}|{emissor.local:^60}|")
         for i in range(itens_per_page - len(emissores)):
-            print(f"|{'-':^30}|{'-':^60}|")
+            print(f"|{'-':^6}|{'-':^30}|{'-':^60}|")
         print("\n\t  ", end="")
         for i in range(pages+1):
             print(i, end=' ')
