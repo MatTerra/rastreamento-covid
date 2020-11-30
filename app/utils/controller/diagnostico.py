@@ -179,8 +179,6 @@ def atualizar_diagnostico(user: Usuario):
             dao.close()
 
 
-
-
 def create_diagnostico(user: Usuario):
     system("clear")
     print(f"{bcolors.OKCYAN}{bcolors.BOLD}"
