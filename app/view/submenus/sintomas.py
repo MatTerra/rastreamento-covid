@@ -23,7 +23,10 @@ def sintoma_menu(user: Usuario):
         elif option == 'c':
             create_caso_sintoma(user)
         elif option == 's':
-            view_sintoma()
+            pagina = 0
+            while pagina != 'x':
+                system("clear")
+                pagina = view_sintoma(pagina)
         elif option == 'x':
             system("clear")
             return user

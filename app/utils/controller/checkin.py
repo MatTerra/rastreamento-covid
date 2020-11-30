@@ -114,7 +114,7 @@ def create_checkin(user: Usuario):
             return
     except Exception as e:
         print(f"{bcolors.FAIL}Não foi possível listar os locais... "
-              f"Tente novamente. {str(e)}{bcolors.ENDC}")
+              f"Tente novamente.{bcolors.ENDC}")
         return
 
     print(f"{bcolors.HEADER}{bcolors.BOLD}"
@@ -169,7 +169,7 @@ def create_checkin(user: Usuario):
         print(f"{bcolors.OKGREEN}Checkin cadastrado com sucesso!{bcolors.ENDC}")
     except Exception as e:
         system("clear")
-        print(f"{bcolors.FAIL}Não foi possível guardar este checkin... {str(e)}"
+        print(f"{bcolors.FAIL}Não foi possível guardar este checkin..."
               f"Tente novamente.{bcolors.ENDC}")
     finally:
         if dao:
@@ -232,7 +232,7 @@ def view_checkins(page: int, user: Usuario):
     except Exception as e:
         system("clear")
         print(f"{bcolors.FAIL}Não foi possível listar os checkins... "
-              f"Tente novamente. {str(e)}{bcolors.ENDC}")
+              f"Tente novamente.{bcolors.ENDC}")
     finally:
         if dao:
             dao.close()
