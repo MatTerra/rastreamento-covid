@@ -17,6 +17,8 @@ def main_menu(user: Usuario) -> str:
                            "AND notificacao_recebida=FALSE;",
                            [user.id_])
         notificacoes = dao.database.get_results()[0][0]
+    except:
+        pass
     finally:
         if dao:
             dao.close()
