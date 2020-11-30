@@ -1,6 +1,7 @@
 from os import system
 from utils.entity.usuario import Usuario
-from utils.controller.checkin import view_checkins, create_checkin
+from utils.controller.checkin import view_checkins, create_checkin, \
+    view_checkins_with_symptoms
 from utils.colors import bcolors
 
 def checkin_menu(user: Usuario):
@@ -10,6 +11,7 @@ def checkin_menu(user: Usuario):
               f"{bcolors.ENDC}\n")
         print("\tl - Listar checkins")
         print("\tc - Cadastrar um novo checkin")
+        print("\tls - Listar checkins com sintomas")
         print("\tx - Voltar ao menu principal")
         option = input(" >> ")
         if option == 'l':
@@ -17,6 +19,11 @@ def checkin_menu(user: Usuario):
             while pagina != 'x':
                 system("clear")
                 pagina = view_checkins(pagina, user)
+        if option == 'ls':
+            pagina = 0
+            while pagina != 'x':
+                system("clear")
+                pagina = view_checkins_with_symptoms(pagina)
         elif option == 'c':
             create_checkin(user)
         elif option == 'x':

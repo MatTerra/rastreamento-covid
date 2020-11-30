@@ -25,15 +25,15 @@ actions = {"p": {"name": "Meu perfil",
                  "function": view.submenus.location.local_submenu},
            "d": {"name": "Fui diagnosticado com COVID",
                  "function": view.submenus.diagnostico.diagnostico_submenu},
-           "c": {"name": "Quero registrar que estive em um local (checkin)",
+           "s": {"name": "Apresentei sintomas",
+                 "function": view.submenus.sintomas.sintoma_menu},
+           "c": {"name": "Quero registrar/ver registros de entrada em locais (checkin)",
                  "function": view.submenus.checkin.checkin_menu},
            "n": {"name": "Notificações",
                  "function": view.submenus.notificacao.notificacao_menu},
            "i": {"name": "Relatório de internações",
                  "function": view.submenus.internacao
                      .relatorio_diagnostico_internacoes},
-           "s": {"name": "Apresentei sintomas",
-                 "function": view.submenus.sintomas.sintoma_menu},
            "x": {"name": "Sair",
                  "function": logout}
-          }
+           }
