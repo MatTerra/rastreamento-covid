@@ -118,7 +118,7 @@ def create_checkin(user: Usuario):
             return
     except Exception as e:
         print(f"{bcolors.FAIL}Não foi possível listar os locais... "
-              f"Tente novamente. {str(e)}{bcolors.ENDC}")
+              f"Tente novamente.{bcolors.ENDC}")
         return
 
     print(f"{bcolors.HEADER}{bcolors.BOLD}"
@@ -184,9 +184,8 @@ def create_checkin(user: Usuario):
             f"{bcolors.OKGREEN}Checkin cadastrado com sucesso!{bcolors.ENDC}")
     except Exception as e:
         system("clear")
-        print(
-            f"{bcolors.FAIL}Não foi possível guardar este checkin... {str(e)}"
-            f"Tente novamente.{bcolors.ENDC}")
+        print(f"{bcolors.FAIL}Não foi possível guardar este checkin..."
+              f"Tente novamente.{bcolors.ENDC}")
     finally:
         if dao:
             dao.close()
@@ -249,7 +248,77 @@ def view_checkins(page: int, user: Usuario):
     except Exception as e:
         system("clear")
         print(f"{bcolors.FAIL}Não foi possível listar os checkins... "
-              f"Tente novamente. {str(e)}{bcolors.ENDC}")
+              f"Tente novamente.{bcolors.ENDC}")
     finally:
         if dao:
             dao.close()
+
+
+def view_checkins_with_symptoms(page: int):
+    dao = None
+    try:
+        dao = CheckinDAO()
+        system("clear")
+        dao.database.query("SELECT * FROM checkin_com_sintoma "
+                           "LIMIT %s OFFSET %s;",
+                           (itens_per_page, (page*itens_per_page)))
+        checkins = dao.database.get_results()
+        dao.database.query("SELECT COUNT(local_nome) "
+                           "FROM checkin_com_sintoma;")
+        total = dao.database.get_results()[0][0]
+        pages = (total - 1) // itens_per_page
+        if pages < 0:
+            pages = 0
+        if page > pages:
+            system("clear")
+            print(f"{bcolors.WARNING}A página {page} não está disponível,"
+                  f" mostrando a última página disponível.{bcolors.ENDC}")
+            return pages
+        print(f"{bcolors.OKBLUE}{bcolors.BOLD}"
+              f"Checkins com sintoma:"
+              f"{bcolors.ENDC}\n")
+        print(f"{bcolors.OKCYAN}"
+              f"|{'Local':^30}|{'Início':^16}|{'Final':^16}|{'Sintoma':^30}|"
+              f"{bcolors.ENDC}")
+        local_dao = LocalDAO()
+        if checkins is None:
+            checkins = []
+        for checkin in checkins:
+            print(f"|{checkin[0]:^30}"
+                  f"|{checkin[1].strftime(datetime_format):^16}|"
+                  f"{checkin[2].strftime(datetime_format):^16}"
+                  f"|{checkin[3]:^30}|")
+        local_dao.close()
+        for i in range(itens_per_page - len(checkins)):
+            print(f"|{'-':^30}|{'-':^16}|{'-':^16}"
+                  f"|{'-':^30}|")
+        print("\n\t  ", end="")
+        for i in range(pages + 1):
+            print(i, end=' ')
+        print("\n", "\t", " " * page * 2, '^')
+        print("Pressione -> para próxima página")
+        print("Pressione <- para a página anterior")
+        print("Pressione x para sair da listagem")
+        option = ''
+        while option != 'x':
+            option = getch()
+            if option == '[':
+                option = getch()
+                if option == "C":
+                    system("clear")
+                    return page + 1 if page + 1 <= pages else page
+                if option == "D":
+                    system("clear")
+                    return page - 1 if page > 0 else page
+        system("clear")
+        return option
+    except Exception as e:
+        system("clear")
+        print(e)
+        input()
+        print(f"{bcolors.FAIL}Não foi possível listar os checkins... "
+              f"Tente novamente.{bcolors.ENDC}")
+    finally:
+        if dao:
+            dao.close()
+
