@@ -1,1 +1,6 @@
 modeloRelacional.mwb.bak
+
+.idea
+.venv
+novaapi.log
+__pycache__
