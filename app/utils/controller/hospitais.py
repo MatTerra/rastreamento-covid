@@ -5,26 +5,22 @@ from getch import getch
 from utils.colors import bcolors
 from utils.entity.hospital import Hospital
 from utils.database.hospitalDAO import HospitalDAO
+from nova_api.dao.generic_sql_dao import GenericSQLDAO
+from nova_api.persistence.postgresql_helper import PostgreSQLHelper
 
 itens_per_page = 5
 
 def view_hospitais(page: int):
     dao = None
     try:
-        dao = HospitalDAO()
-        system("clear")
-        dao.database.query("CREATE OR REPLACE VIEW hospitais_view AS"
-                            "SELECT "
-                            "    hospital.hospital_nome,"
-                            "    COUNT(contratacao.contratacao_hospital_id_),"
-                            "    COUNT(internacao.internacao_hospital_id_)"
-                            "FROM hospital"
-                            "   LEFT JOIN internacao ON internacao.internacao_hospital_id_ = hospital.hospital_id_"
-                            "    LEFT JOIN contratacao ON contratacao.contratacao_hospital_id_ = hospital.hospital_id_"
-                            "GROUP BY hospital.hospital_id_ LIMIT %s OFFSET %s", (itens_per_page, page*itens_per_page))
+        dao = GenericSQLDAO(database_type=PostgreSQLHelper)
+        dao.database.query("SELECT * "
+                           "FROM hospitais_view LIMIT %s OFFSET %s",
+                           (itens_per_page, page*itens_per_page)
+                           )
         results = dao.database.get_results()
-        dao.database.query("SELECT COUNT(hospital_id_) "
-                           "FROM hospital"
+        dao.database.query("SELECT COUNT(*) "
+                           "FROM hospitais_view"
                            )
         total = dao.database.get_results()[0][0]
         pages = (total - 1) // itens_per_page
@@ -39,14 +35,16 @@ def view_hospitais(page: int):
               f"Hospital"
               f"{bcolors.ENDC}\n")
         print(f"{bcolors.OKCYAN}"
-              f"|{'Nome':^30}|{'Internações':^20}|{'Médicos':^20}|"
+              f"|{'Nome':^30}|{'Internações':^20}|{'Médicos':^20}|{'Relação I/M':^20}|"
               f"{bcolors.ENDC}")
         for result in results:
             print(f"|{result[0]:^30}|"
                   f"{result[1]:^20}"
-                  f"|{result[2]:^20}|")
+                  f"|{result[2]:^20}"
+                  f"|{result[3]:^20.2f}|")
         for i in range(itens_per_page - len(results)):
-            print(f"|{'-':^30}|{'-':^5}|{'-':^20}"
+            print(f"|{'-':^30}|{'-':^20}"
+                  f"|{'-':^20}"
                   f"|{'-':^20}|")
         print("\n\t  ", end="")
         for i in range(pages + 1):
