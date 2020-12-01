@@ -34,7 +34,7 @@ actions = {"p": {"name": "Meu perfil",
                  "function": view.submenus.checkin.checkin_menu},
            "n": {"name": "Notificações",
                  "function": view.submenus.notificacao.notificacao_menu},
-           "h": {"name": "Hospitais", 
+           "h": {"name": "Relação Internações/Médicos para os hospitais", 
                  "function": view.submenus.hospitais.hospitais_menu},
            "i": {"name": "Relatório de internações",
                  "function": view.submenus.internacao
