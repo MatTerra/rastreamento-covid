@@ -8,6 +8,7 @@ import view.submenus.location
 import view.submenus.diagnostico
 import view.submenus.checkin
 import view.submenus.notificacao
+import view.submenus.hospitais
 
 __all__ = ["authentication", "profile", "location", "actions"]
 
@@ -29,6 +30,8 @@ actions = {"p": {"name": "Perfil",
                  "function": view.submenus.checkin.checkin_menu},
            "n": {"name": "Notificações",
                  "function": view.submenus.notificacao.notificacao_menu},
+           "h": {"name": "Hospitais", 
+                 "function": view.submenus.hospitais.hospitais_menu},
            "x": {"name": "Sair",
                  "function": logout}
           }
