@@ -39,9 +39,9 @@ def view_hospitais(page: int):
               f"{bcolors.ENDC}")
         for result in results:
             print(f"|{result[0]:^30}|"
-                  f"{result[1]:^20}"
-                  f"|{result[2]:^20}"
-                  f"|{result[3]:^20.2f}|")
+                  f"{result[1] if result[1] else 0:^20}"
+                  f"|{result[2] if result[2] else 0:^20}"
+                  f"|{result[3] if result [3] else 0:^20.2f}|")
         for i in range(itens_per_page - len(results)):
             print(f"|{'-':^30}|{'-':^20}"
                   f"|{'-':^20}"
